@@ -4,9 +4,12 @@ name = gets.chomp
 print "Рост: "
 growth = gets.to_i
 
+perfect_weight = growth - 110
+
 print "#{name}, "
-if growth - 110 < 0
+
+if perfect_weight < 0
   puts "ваш вес уже оптимальный"
 else
-  puts "ваш идеальный вес #{growth - 110}"
+  puts "ваш идеальный вес #{perfect_weight}"
 end

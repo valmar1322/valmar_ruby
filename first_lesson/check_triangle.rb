@@ -15,10 +15,8 @@ elsif a == b || a == c || b == c
   puts "Треугольник равнобедренный"
 end
 
-hypo = [a, b, c].max
+a, b, hypo = [a, b, c].sort!
 
-if (hypo**2 == a**2 + b**2) ||
-   (hypo**2 == a**2 + c**2) ||
-   (hypo**2 == b**2 + c**2)
+if hypo**2 == a**2 + b**2
   puts "Треугольник прямоугольный"
 end
