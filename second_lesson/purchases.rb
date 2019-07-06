@@ -5,9 +5,7 @@ loop do
   puts 'product name: '
   product_name = gets.chomp
 
-  if product_name == 'stop'
-    break
-  end
+  break if product_name == 'stop'
 
   puts 'price per one product: '
   price = gets.chomp.to_f
