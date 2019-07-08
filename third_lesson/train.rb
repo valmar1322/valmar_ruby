@@ -1,5 +1,5 @@
 class Train
-  attr_reader :speed, :count_carriages
+  attr_reader :speed, :count_carriages, :type
 
   def initialize(number, type, count_carriages)
     @number = number
@@ -28,10 +28,21 @@ class Train
     @count_carriages -= 1 if stop?
   end
 
-  def accept_route(route)
+  def choose_route(route)
     @route = route
-    @route.start_point.take_train(self)
+    @route.station_list[0].take_train(self)
+    @current_station = 0
   end
 
+  def get_current_station
+    @route.station_list[@current_station]
+  end
 
+  def get_next_station
+    @route.station_list.fetch(@current_station + 1, 'Route is ended')
+  end
+
+  def get_prev_station
+    @route.station_list.fetch(@current_station - 1, 'Route is just started')
+  end
 end

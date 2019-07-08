@@ -1,5 +1,4 @@
-count = 0
-speed = 0
+arr = [5, 4, 3, 2 ,1]
 
-count += 1 if speed == 0
-puts count
+res = arr.fetch(5, 'out of bound')
+puts res

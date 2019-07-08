@@ -1,10 +1,8 @@
 class Route
-  attr_reader :start_point, :end_point, :station_list
+  attr_reader :station_list
 
   def initialize(start_point, end_point)
-    @start_point = start_point
-    @end_point = end_point
-    @station_list = []
+    @station_list = [start_point, end_point]
   end
 
   def add_station(station)
@@ -16,8 +14,6 @@ class Route
   end
 
   def info
-    print "#{start_point} -> "
     @station_list.each { |station| print "#{station.name} -> " }
-    print "#{end_point}"
   end
 end
