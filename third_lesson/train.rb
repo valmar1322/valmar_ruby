@@ -17,7 +17,7 @@ class Train
   end
 
   def stop?
-    @speed == 0
+    @speed.zero?
   end
 
   def add_carriage
@@ -34,15 +34,31 @@ class Train
     @current_station = 0
   end
 
-  def get_current_station
+  def current_station
     @route.station_list[@current_station]
   end
 
-  def get_next_station
-    @route.station_list.fetch(@current_station + 1, 'Route is ended')
+  def next_station
+    @route.station_list.fetch(@current_station + 1, false)
   end
 
-  def get_prev_station
-    @route.station_list.fetch(@current_station - 1, 'Route is just started')
+  def prev_station
+    @route.station_list.fetch(@current_station - 1, false)
+  end
+
+  def move_forward
+    return false unless next_station
+
+    current_station.send_train(self)
+    next_station.take_train(self)
+    @current_station += 1
+  end
+
+  def move_backward
+    return false unless prev_station
+
+    current_station.send_train(self)
+    prev_station.take_train(self)
+    @current_station -= 1
   end
 end

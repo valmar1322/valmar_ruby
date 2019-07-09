@@ -6,14 +6,15 @@ class Route
   end
 
   def add_station(station)
-    @station_list << station
+    @station_list.insert(-2, station)
   end
 
   def remove_station(station)
-    @station_list.delete(station)
+    station_list.delete(station) if station != station_list.first &&
+                                    station != station_list.last
   end
 
   def info
-    @station_list.each { |station| print "#{station.name} -> " }
+    station_list.each { |station| print "#{station.name} -> " }
   end
 end
