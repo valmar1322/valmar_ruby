@@ -30,3 +30,6 @@ puts passenger_train1.type
 puts passenger_train1.number
 puts passenger_train1.current_station.trains.first.number
 puts station1.trains.first == passenger_train1
+
+
+puts station1.trains_count('passenger')

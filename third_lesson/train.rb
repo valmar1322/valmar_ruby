@@ -25,25 +25,27 @@ class Train
   end
 
   def remove_carriage
-    @count_carriages -= 1 if stop?
+    @count_carriages -= 1 if stop? && !@count_carriages.zero?
   end
 
   def choose_route(route)
     @route = route
-    @route.station_list[0].take_train(self)
     @current_station = 0
+    current_station.take_train(self)
   end
 
   def current_station
-    @route.station_list[@current_station]
+    @route.stations[@current_station]
   end
 
   def next_station
-    @route.station_list.fetch(@current_station + 1, false)
+    @route.stations.fetch(@current_station + 1, nil)
   end
 
   def prev_station
-    @route.station_list.fetch(@current_station - 1, false)
+    return if @current_station <= 0
+
+    @route.stations.fetch(@current_station - 1, nil)
   end
 
   def move_forward
