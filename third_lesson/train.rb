@@ -39,11 +39,11 @@ class Train
   end
 
   def next_station
-    @route.stations.fetch(@current_station + 1, nil)
+    @route.stations[@current_station + 1]
   end
 
   def prev_station
-    return if @current_station <= 0
+    return unless @current_station.positive?
 
     @route.stations.fetch(@current_station - 1, nil)
   end

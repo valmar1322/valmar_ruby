@@ -12,7 +12,7 @@ class Route
   def remove_station(station)
     return if [stations.first, stations.last].include?(station)
 
-    delete stations[station]
+    stations.delete[station]
   end
 
   def info
