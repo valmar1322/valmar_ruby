@@ -7,7 +7,7 @@ class Route
   end
 
   def add_station(station)
-    @stations.insert(-2, station)
+    @stations.insert(-2, station) unless stations.include?(station)
   end
 
   def remove_station(station)
@@ -17,7 +17,8 @@ class Route
   end
 
   def info
-    stations.each { |station| print "#{station.name} -> " }
-    puts ''
+    info = ''
+    stations.each { |station| info += "#{station.name} -> " }
+    info
   end
 end

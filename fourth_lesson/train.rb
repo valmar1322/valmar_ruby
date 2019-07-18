@@ -68,12 +68,7 @@ class Train
     wagons.delete(wagon)
   end
 
-  def wagons_info
-    puts "Список доступных вагонов для поезда #{number}: "
-    wagons.each.with_index { |wagon, index| puts "#{wagon} - #{index}" }
-  end
-
   def empty?
-    wagons.size == 0
+    wagons.empty?
   end
 end

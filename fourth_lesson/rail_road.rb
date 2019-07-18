@@ -12,26 +12,16 @@ class RailRoad
       print_menu
       input = gets.to_i
       case input
-      when 1
-        create_train
-      when 2
-        create_station
-      when 3
-        manage_routes
-      when 4
-        add_route_to_train
-      when 5
-        add_wagon_to_train
-      when 6
-        remove_wagon_from_train
-      when 7
-        manage_trains
-      when 8
-        trains_info
-      when 9
-        stations_info
-      when 10
-        break
+      when 1 then create_train
+      when 2 then create_station
+      when 3 then manage_routes
+      when 4 then add_route_to_train
+      when 5 then add_wagon_to_train
+      when 6 then remove_wagon_from_train
+      when 7 then manage_trains
+      when 8 then trains_info
+      when 9 then stations_info
+      when 10 then break
       else
         puts 'Неправильный ввод'
       end
@@ -63,16 +53,14 @@ class RailRoad
   end
 
   def create_train
-    puts 'a - Пассажирский поезд'
-    puts 'b - Грузовой поезд'
+    puts '1 - Пассажирский поезд'
+    puts '2 - Грузовой поезд'
 
-    choice = gets.chomp.downcase
+    choice = gets.to_i
 
     case choice
-    when 'a'
-      type = :passenger
-    when 'b'
-      type = :cargo
+    when 1 then type = :passenger
+    when 2 then type = :cargo
     else
       type = :passenger
       puts "Неправильный ввод, по умолчанию выбран: #{type}"
@@ -98,19 +86,16 @@ class RailRoad
   end
 
   def manage_routes
-    puts 'a - Создать маршрут'
-    puts 'b - Добавить станцию'
-    puts 'c - Удалить станцию'
+    puts '1 - Создать маршрут'
+    puts '2 - Добавить станцию'
+    puts '3 - Удалить станцию'
 
-    choice = gets.chomp.downcase
+    choice = gets.to_i
 
     case choice
-    when 'a'
-      create_route
-    when 'b'
-      add_station_to_route
-    when 'c'
-      delete_station_from_route
+    when 1 then create_route
+    when 2 then add_station_to_route
+    when 3 then delete_station_from_route
     else
       puts 'Неправильный ввод'
     end
@@ -124,69 +109,103 @@ class RailRoad
 
     stations_info
     puts 'Выберите начальную станцию:'
-    start_station = require_station
+    start_station = select_from_array(stations)
     puts 'Выберите конечную станцию:'
-    end_station = require_station
+    end_station = select_from_array(stations)
 
-    return if start_station.nil? || end_station.nil?
+    if start_station.nil? || end_station.nil?
+      puts 'Неправильный ввод данных'
+      return
+    end
 
     create_route!(start_station, end_station)
-    route_index = routes.size - 1
-    puts "Маршрут создан, вы можете обращаться к нему по индексу #{route_index}"
+    puts "Маршрут создан, вы можете обращаться к нему по индексу #{routes.size}"
   end
 
   def add_station_to_route
+    unless relevant?(routes)
+      puts 'Нет созданных маршрутов'
+      return
+    end
+
     routes_info
     puts 'Выберите маршрут:'
-    route = require_route
-    return if route.nil?
+    route = select_from_array(routes)
+    if route.nil?
+      puts 'Такого маршрута не существует'
+      return
+    end
 
     stations_info
     puts 'Выберите станцию для добавления:'
-    station = require_station
-    return if station.nil?
+    station = select_from_array(stations)
+    if station.nil?
+      puts 'Такой станции не существует'
+      return
+    end
 
     route.add_station(station)
     puts 'Станция успешно добавлена. Маршрут выглядит следующим образом:'
-    route.info
+    puts route.info
   end
 
   def delete_station_from_route
+    unless relevant?(routes)
+      puts 'Нет созданных маршрутов'
+      return
+    end
+
     routes_info
     puts 'Выберите маршрут:'
-    route = require_route
+    route = select_from_array(routes)
 
     return if route.nil?
 
-    stations_info
+    stations_info(route.stations)
     puts 'Выберите станцию для удаления:'
-    station = require_station
-    return if station.nil?
+    station = select_from_array(route.stations)
+
+    if station.nil?
+      puts 'Такой станции не существует'
+      return
+    end
 
     route.remove_station(station)
     puts 'Станция удалена. Маршрут выглядит следующим образом:'
-    route.info
+    puts route.info
   end
 
   def add_route_to_train
+    unless relevant_all?(routes, trains)
+      puts 'Вы должны создать маршрут и поезд'
+      return
+    end
+
     trains_info
     puts 'Выберите поезд:'
-    train = require_train
+    train = select_from_array(trains)
 
     return if train.nil?
 
     routes_info
     puts 'Выберите маршрут'
-    route = require_route
-    return if route.nil?
+    route = select_from_array(routes)
+    if route.nil?
+      puts 'Такого маршрута не существует'
+      return
+    end
 
     train.choose_route(route)
   end
 
   def add_wagon_to_train
+    unless relevant?(trains)
+      puts 'Вы должны создать поезд'
+      return
+    end
     trains_info
     puts 'Выберите поезд:'
-    train = require_train
+    train = select_from_array(trains)
 
     return if train.nil?
 
@@ -201,9 +220,13 @@ class RailRoad
   end
 
   def remove_wagon_from_train
+    unless relevant?(trains)
+      puts 'Вы должны создать поезд'
+      return
+    end
     trains_info
     puts 'Выберите поезд:'
-    train = require_train
+    train = select_from_array(trains)
 
     if train.nil?
       puts 'Такого поезда не существует'
@@ -215,24 +238,28 @@ class RailRoad
       return
     end
 
-    train.wagons_info
+    wagons_info(train)
     puts 'Выберите вагон для удаления: '
-    wagon = require_wagon(train)
+    wagon = select_from_array(train.wagons)
     return if wagon.nil?
 
     train.remove_wagon(wagon)
     puts "Вагон успешно удален, поезд под номером #{train.number} выглядит следующим образом: "
-    train.wagons_info
+    wagons_info(train)
   end
 
   def manage_trains
+    unless relevant?(trains)
+      puts 'Вы должны создать поезд'
+      return
+    end
     trains_info
     puts 'Выберите поезд:'
-    train = require_train
+    train = select_from_array(trains)
 
     return if train.nil?
 
-    puts "Поезд под номером #{train.number} находится на #{train.current_station.name} "
+    show_current_position(train)
     unless train.next_station.nil?
       puts "следующая станция #{train.next_station.name}"
     end
@@ -240,69 +267,46 @@ class RailRoad
       puts "предыдущая станция #{train.prev_station.name}"
     end
 
-    puts 'a - ехать вперед'
-    puts 'b - ехать назад'
+    puts '1 - ехать вперед'
+    puts '2 - ехать назад'
 
-    choice = gets.chomp.downcase
+    choice = gets.to_i
 
     case choice
-    when 'a'
-      train.move_forward
-    when 'b'
-      train.move_backward
+    when 1 then train.move_forward
+    when 2 then train.move_backward
     else
       puts 'Неверный ввод, выбран вариант "ехать вперед"'
       train.move_forward
     end
   end
 
-  def stations_info
+  def stations_info(needle_stations = stations)
     puts ''
     puts 'Список доступных станций:'
-    stations.each.with_index { |station, index| puts "#{index} - #{station.name}" }
+    needle_stations.each.with_index(1) { |station, index| puts "#{index} - #{station.name}" }
     puts ''
   end
 
   def trains_info
     puts ''
     puts 'Список доступных поездов: '
-    trains.each.with_index { |train, index| puts "#{index} - №#{train.number}"}
+    trains.each.with_index(1) { |train, index| puts "#{index} - №#{train.number}"}
     puts ''
   end
 
   def routes_info
     puts ''
     puts 'Список доступных направлений:'
-    routes.each.with_index { |route, index| puts "#{index} #{route.name}" }
+    routes.each.with_index(1) { |route, index| puts "#{index} #{route.name}" }
     puts ''
   end
 
-  def require_route
-    needle_route = routes[gets.to_i]
-    if needle_route.nil?
-      puts 'Неверный ввод: такого маршрута не существует'
-      return nil
-    end
-    needle_route
-  end
+  def select_from_array(array)
+    index = gets.to_i - 1
+    return if index.negative?
 
-  def require_station
-    needle_station = stations[gets.to_i]
-
-    if needle_station.nil?
-      puts 'Неверный ввод: такой станции не существует'
-      return nil
-    end
-    needle_station
-  end
-
-  def require_train
-    needle_train = trains[gets.to_i]
-    if needle_train.nil?
-      puts 'Неверный ввод: такого поезда не существует'
-      return nil
-    end
-    needle_train
+    array[index]
   end
 
   def require_wagon(train)
@@ -331,5 +335,22 @@ class RailRoad
     else
       "Can't recognize #{type} type"
     end
+  end
+
+  def show_current_position(train)
+    puts "Поезд под номером #{train.number} находится на #{train.current_station.name} "
+  end
+
+  def wagons_info(train)
+    puts "Список доступных вагонов для поезда #{train.number}: "
+    train.wagons.each.with_index(1) { |wagon, index| puts "#{wagon} - #{index}" }
+  end
+
+  def relevant?(array)
+    array.any?
+  end
+
+  def relevant_all?(*args)
+    args.all? { |arg| relevant? arg }
   end
 end
