@@ -347,7 +347,7 @@ class RailRoad
   end
 
   def relevant?(array)
-    array.any?
+    !array.empty?
   end
 
   def relevant_all?(*args)
