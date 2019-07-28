@@ -2,8 +2,6 @@ class Route
   include InstanceCounter
   attr_reader :stations, :name
 
-  @instances = 0
-
   def initialize(start_point, end_point)
     @stations = [start_point, end_point]
     @name = "#{start_point.name} - #{end_point.name}"

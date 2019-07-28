@@ -4,8 +4,6 @@ class Station
 
   @@stations = []
 
-  @instances = 0
-
   def self.all
     @@stations
   end
