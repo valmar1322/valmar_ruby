@@ -1,6 +1,12 @@
 class Station
   include InstanceCounter
   include Validator
+
+  MIN_STATION_NAME_LENGTH = 3
+  MAX_STATION_NAME_LENGTH = 25
+  MIN_SYMBOLS = 'Название станции должно быть минимум 3 символа'
+  MAX_SYMBOLS = 'Название станции должно быть не более 25 символов'
+
   attr_reader :trains, :name
 
   @@stations = []
@@ -31,15 +37,12 @@ class Station
 
   private
 
-  MIN_STATION_NAME_LENGTH = 3
-  MAX_STATION_NAME_LENGTH = 25
-
   def validate!
     if name.length < MIN_STATION_NAME_LENGTH
-      raise 'Название станции должно быть минимум 3 символа'
+      raise MIN_SYMBOLS
     end
     if name.length > MAX_STATION_NAME_LENGTH
-      raise 'Station name should be no longer than 25 symbols'
+      raise MAX_SYMBOLS
     end
   end
 end

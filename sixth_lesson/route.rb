@@ -1,6 +1,9 @@
 class Route
   include InstanceCounter
   include Validator
+
+  INVALID_STATIONS = 'Станции должны быть объектами Station'
+
   attr_reader :stations, :name
 
   def initialize(start_point, end_point)
@@ -21,14 +24,12 @@ class Route
   end
 
   def info
-    info = ''
-    stations.each { |station| info += "#{station.name} -> " }
-    info
+    stations.map(&:name).join(' -> ')
   end
 
   private
 
   def validate!
-    raise 'All points should be Station objects' unless stations.all? { |station| station.is_a?(Station) }
+    raise INVALID_STATIONS unless stations.all? { |station| station.is_a?(Station) }
   end
 end

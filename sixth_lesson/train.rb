@@ -2,6 +2,11 @@ class Train
   include Producer
   include InstanceCounter
   include Validator
+
+  NUMBER_FORMAT = /^\w{3}-?\w{2}$/i
+  INVALID_FORMAT = 'Неправильный формат номера поезда. Формат:
+                   "XXX-XX", где X - число или буква'
+
   attr_reader :speed, :number, :wagons, :type
 
   @@trains = {}
@@ -86,11 +91,9 @@ class Train
 
   protected
 
-  NUMBER_FORMAT = /^\w{3}-?\w{2}$/i
-
   def validate!
     if number !~ NUMBER_FORMAT
-      raise 'Неправильный формат номера поезда. Формат: "XXX-XX", где X - число или буква'
+      raise INVALID_FORMAT
     end
   end
 end

@@ -113,18 +113,19 @@ class RailRoad
       return
     end
 
-    stations_info
-    puts 'Выберите начальную станцию:'
-    start_station = select_from_array(stations)
-    puts 'Выберите конечную станцию:'
-    end_station = select_from_array(stations)
+    begin
+      stations_info
+      puts 'Выберите начальную станцию:'
+      start_station = select_from_array(stations)
+      puts 'Выберите конечную станцию:'
+      end_station = select_from_array(stations)
 
-    if start_station.nil? || end_station.nil?
-      puts 'Неправильный ввод данных'
-      return
+      create_route!(start_station, end_station)
+    rescue RuntimeError => e
+      puts e.message
+      puts 'Некорректный ввод, выберите правильные индексы'
+      retry
     end
-
-    create_route!(start_station, end_station)
     puts "Маршрут создан, вы можете обращаться к нему по индексу #{routes.size}"
   end
 
