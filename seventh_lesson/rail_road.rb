@@ -349,20 +349,25 @@ class RailRoad
 
     return if needle_train.nil? || needle_train.empty?
 
-    wagons_info(needle_train)
-    puts 'Выберите вагон: '
-    needle_wagon = select_from_array(needle_train.wagons)
 
-    return if needle_wagon.nil?
+      wagons_info(needle_train)
+      puts 'Выберите вагон: '
+      needle_wagon = select_from_array(needle_train.wagons)
 
-    if needle_wagon.is_a?(PassengerWagon)
-      needle_wagon.take_place
-      puts needle_wagon
-    elsif needle_wagon.is_a?(CargoWagon)
-      puts "Свободный объем для загрузки: #{needle_wagon.remaining_space}"
-      puts 'Введите объем для загрузки: '
-      loaded_cargo = gets.to_i
-      needle_wagon.load_cargo(loaded_cargo)
+      return if needle_wagon.nil?
+
+    begin
+      if needle_wagon.is_a?(PassengerWagon)
+        needle_wagon.load_entity
+        puts needle_wagon
+      elsif needle_wagon.is_a?(CargoWagon)
+        puts "Свободный объем для загрузки: #{needle_wagon.remaining_space}"
+        puts 'Введите объем для загрузки: '
+        loaded_cargo = gets.to_i
+        needle_wagon.load_entity(loaded_cargo)
+      end
+    rescue RuntimeError => e
+      puts e.message
     end
   end
 
