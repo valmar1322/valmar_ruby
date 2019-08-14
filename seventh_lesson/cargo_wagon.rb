@@ -1,10 +1,10 @@
 class CargoWagon < Wagon
-  WRONG_CAPACITY = 'Грузоподъемность должна быть не меньше нуля'
+  WRONG_CAPACITY = 'Грузоподъемность должна быть >= 1'
+  MIN_CAPACITY = 1
 
   def initialize(carrying)
-    @loaded_cargo = 0
     super(carrying)
-    validate!
+    @loaded_cargo = 0
   end
 
   def wrong_capacity
@@ -13,5 +13,15 @@ class CargoWagon < Wagon
 
   def to_s
     "Грузоподъемность вагона: #{capacity}, занято объема: #{occupied_capacity}"
+  end
+
+  protected
+
+  def min_capacity
+    MIN_CAPACITY
+  end
+
+  def wrong_capacity
+    WRONG_CAPACITY
   end
 end
