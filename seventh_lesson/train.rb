@@ -93,7 +93,7 @@ class Train
     wagons.size
   end
 
-  def each_wagon(&block)
+  def each_wagon
     wagons.each.with_index(1) { |wagon, index| yield(wagon, index) }
   end
 

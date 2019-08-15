@@ -35,7 +35,7 @@ class Station
     trains.count { |train| train.type == type }
   end
 
-  def each_train(&block)
+  def each_train
     trains.each { |train| yield(train) }
   end
 
