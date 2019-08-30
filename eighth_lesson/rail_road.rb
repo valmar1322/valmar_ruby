@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+﻿# frozen_string_literal: true
 
 class RailRoad
   attr_reader :stations, :routes, :trains

@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+﻿# frozen_string_literal: true
 
 class CargoWagon < Wagon
   WRONG_CAPACITY = 'Грузоподъемность должна быть >= 1'
