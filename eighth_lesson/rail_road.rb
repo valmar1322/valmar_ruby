@@ -62,7 +62,7 @@ class RailRoad
            when 2 then :cargo
            else
              :passenger
-          end
+           end
 
     begin
       puts 'Введите номер(название) поезда:'
@@ -305,7 +305,7 @@ class RailRoad
     return unless relevant?(trains)
 
     trains_info
-    puts 'Для управления выгонами выберите поезд: '
+    puts 'Для управления вагонами выберите поезд: '
     needle_train = select_from_array(trains)
 
     return if needle_train.nil? || needle_train.empty?
