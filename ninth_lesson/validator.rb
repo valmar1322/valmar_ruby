@@ -18,28 +18,33 @@ module Validator
         validation_attr: validation_attr
       }
     end
+
+    private
+
+    def validation_presence(value, **validation)
+      value.nil? || value == ''
+    end
+
+    def validation_type(value, **validation)
+      !value.instance_of? validation[:validation_attr]
+    end
+
+    def validation_format(value, **validation)
+      value !~ validation[:validation_attr]
+    end
   end
 
   module InstanceMethods
     def validate!
       self.class.validations.each do |validation|
         var_value = instance_variable_get("@#{validation[:attribute]}")
+        
+        validation_method = "validation_#{validation[:validation_type]}".to_sym
 
-        case validation[:validation_type]
-        when :presence
-          if var_value.nil? || var_value == ''
-            raise "#{validation[:attribute]} nil or empty string"
-          end
-        when :type
-          unless var_value.instance_of? validation[:validation_attr]
-            raise "Wrong class for #{validation[:attribute]},
-                   should be #{validation[:validation_attr]}"
-          end
-        when :format
-          if var_value !~ validation[:validation_attr]
-            raise "Wrong format #{var_value} for #{validation[:attribute]}
-                  format: #{validation[:validation_attr]}"
-          end
+        result = self.class.send(validation_method, var_value, validation)
+        if result
+          raise "validation error! method: #{validation_method}, field: #{validation[:attribute]},
+                 value: #{var_value}"
         end
       end
     end
